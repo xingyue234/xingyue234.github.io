@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>商品筛选</title>
+		<style type="text/css">
+			ul,li,body{
+				margin: 0;
+				padding: 0;
+			}
+			ul{
+				list-style: none;
+			}
+			.box{
+				width: 800px;
+				height: 600px;
+				margin: 50px auto 0;
+				background: #82c1bb;
+				border: 1px solid #82c1bb;
+				cursor: default;
+			}
+			.main{
+				width: 750px;
+				height: 550px;
+				margin: 20px auto 0;
+				background: rgba(255,255,255,.5);
+				box-sizing: border-box;
+			}
+			.head{
+				height: 50px;
+				margin-bottom: 20px;
+				line-height: 50px;
+				padding-left: 15px;
+				border-bottom: 1px solid green;
+			}
+			.head ul{
+				
+			}
+			.head ul li{
+				border: 1px solid #1496ba;
+				color: #1496ba;
+				height: 25px;
+				padding: 0 4px;
+				text-align: center;
+				line-height: 25px;
+				margin-right: 5px;
+			}
+			.head ul li .del{
+				margin-left: 5px;
+				background: #1496ba;
+				color: white;
+				padding: 2px;
+				margin-top: 1px;
+			}
+			.head span{
+				font-weight: 700;
+			}
+			.head > ul{
+				display: inline-block;
+			}
+			.head > ul > li{
+				display: none;
+			}
+			.con{
+				overflow: hidden;
+			}
+			.con ul{
+				float: left;
+				padding: 15px;
+			}
+			.con ul li span{
+				color: #C6C6C6;
+				float: left;
+			}
+			.con > ul > li{
+				float: left;
+				width: 100%;
+				border-bottom: 1px dashed green;
+				margin-bottom: 10px;
+			}
+			.con ul li li{
+				width: 60px;
+				height: 25px;
+				line-height: 25px;
+				float: left;
+				margin-right: 10px;
+			}
+			.con ul li li:active{
+				color: red;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<div class="main">
+				<div class="head">
+					<span>你的选择:</span>
+					<ul>
+					</ul>
+				</div>
+				<div class="con">
+					<ul>
+						<li>
+							<span>品牌</span>
+							<ul>
+								<li>苹果</li>
+								<li>小米</li>
+								<li>锤子</li>
+								<li>魅族</li>
+								<li>华为</li>
+								<li>三星</li>
+							</ul>
+						</li>
+						<li>
+							<span>尺寸</span>
+							<ul>
+								<li>尺寸一</li>
+								<li>尺寸二</li>
+								<li>尺寸三</li>
+								<li>尺寸四</li>
+							</ul>
+						</li>
+						<li>
+							<span>系统</span>
+							<ul>
+								<li>系统一</li>
+								<li>系统二</li>
+								<li>系统三</li>
+								<li>系统四</li>
+							</ul>
+						</li>
+						<li>
+							<span>网络</span>
+							<ul>
+								<li>网络一</li>
+								<li>网络二</li>
+								<li>网络三</li>
+								<li>网络四</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<script>
+			window.onload = function(){
+				var ul = document.querySelector('.head>ul');
+				var lis = document.querySelectorAll('.con li ul li');
+				var uls = document.querySelectorAll('.con li ul');
+				var items = document.querySelectorAll('.con>ul>li');
+				
+				//根据items动态生成li
+				var str = '';
+				for(var i=0;i<items.length;i++){
+					str += `
+					     <li id="${i}">
+							<span class="del">
+								×
+							</span>
+						</li>
+					`;
+				}
+				ul.innerHTML = str;
+				var sels = document.querySelectorAll('.head ul li');
+				var spans = document.querySelectorAll('.head li span');
+				//添加删除事件
+				for(var i=0;i<spans.length;i++){
+					spans[i].onclick = function(){
+						this.parentNode.style.display = 'none';
+					}
+				}
+				
+				//给每个列表的ul添加属性
+				for(var i=0;i<uls.length;i++){
+					uls[i].index = i;
+				}
+				
+				for(var i=0;i<lis.length;i++){
+					lis[i].onclick = function(){
+						sels[this.parentElement.index].style.display = 'inline-block';
+						sels[this.parentElement.index].childNodes[0].nodeValue = this.innerHTML;
+					}
+				}
+			}
+		</script>
+	</body>
+</html>

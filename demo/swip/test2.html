@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			li{
+				list-style: none;
+			}
+			ul,body{
+			padding: 0;
+			margin: 0;
+			}
+			.box{
+				width: 1201px;
+				height: 460px;
+				margin: 50px 0 0 10px;
+				position: relative;
+				box-shadow: 1px 1px 5px;
+				overflow: hidden;
+				margin: 50px auto 0;
+			}
+			
+			.box li img{
+				position: absolute;
+				left: 0;
+				top: 0;
+				cursor: pointer;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<ul>
+				<li><img src="img/special-1.jpg"/></li>
+				<li><img src="img/special-2.jpg"/></li>
+				<li><img src="img/special-3.jpg"/></li>
+				<li><img src="img/special-4.jpg"/></li>
+				<li><img src="img/special-5.jpg"/></li>
+			</ul>
+		</div>
+	</body>
+	<script>
+		//右边到第三个，左边可以放五个
+		var box = document.querySelector('.box');
+		var imgs = document.querySelectorAll('.box li img');
+		var n = 0;
+		var m = imgs.length - 1; //上一个
+		//设置样式
+		for(var i=0;i<imgs.length;i++){
+			imgs[i].style.left = 101*i + 'px';
+		}
+		
+		for(var i=0;i<imgs.length;i++){
+			imgs[i].index = i;
+			imgs[i].onmouseover = function(){
+				//console.log(m,this.index);
+				if(this.index < m){
+					for(var i=this.index + 1;i<imgs.length;i++){
+					      imgs[i].style.left = 101*(i-1) + 797 +'px';
+					      imgs[i].style.transition = 'left 1s';
+				    }
+				}else if(this.index > m){
+					for(var j=this.index;j>-1;j--){
+					      imgs[j].style.left = 101*j + 'px';
+					      imgs[j].style.transition = 'left 1s';
+				    }
+				}
+				m = this.index;
+			}
+		}
+	</script>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>上移下移</title>
+		<style>
+			ul,li,body{
+				margin: 0;
+				padding: 0;
+				font-family: "微软雅黑";
+			}
+			li{
+				list-style: none;
+			}
+			a{
+				text-decoration: none;
+			}
+			.box{
+				width: 600px;
+				height: 650px;
+				margin: 20px auto 0;
+				background: #ff6b80;
+				border: 1px solid #ff6b80;
+			}
+			.box ul{
+				width: 500px;
+				margin: 200px auto 0;
+				position: relative;
+			}
+			.box li{
+				width: 500px;
+				box-sizing: border-box;
+				height: 62px;
+				line-height: 62px;
+				border-radius: 6px;
+				border: 1px solid #ff6b80;
+				background: white;
+				position: absolute;
+				left: 0;
+				top: 0;
+				padding-left: 50px;
+				margin-bottom: 12px;
+				transition: all .5s;
+			}
+			.box li:after{
+				content: '';
+				display: block;
+				width: 5px;
+				height: 28px;
+				background: #ff6b80;
+				position: absolute;
+				left: 30px;
+				top: 50%;
+				margin-top: -14px;
+			}
+			.box li a{
+				display: inline-block;
+				color: #ff6b80;
+				width: 70px;
+				height: 32px;
+				line-height: 32px;
+				border: 1px solid #ff6b80;
+				text-align: center;
+				border-radius: 3px;
+				position: absolute;
+				top: 50%;
+				margin-top: -17px;
+			}
+			.box li a:first-child{
+				left:330px;
+			}
+			.box li a:last-child{
+				left: 414px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<ul>
+				<li>
+					AJAX
+					<a href="javascript:;" class="up">上移</a><a href="javascript:;" class="down">下移</a>
+				</li>
+				<li>
+					jQuery
+					<a href="javascript:;" class="up">上移</a><a href="javascript:;" class="down">下移</a>
+				</li>
+				<li>
+					JS基础
+					<a href="javascript:;" class="up">上移</a><a href="javascript:;" class="down">下移</a>
+				</li>
+				<li>
+					移动端实战
+					<a href="javascript:;" class="up">上移</a><a href="javascript:;" class="down">下移</a>
+				</li>
+				<li>
+					canvas游戏
+					<a href="javascript:;" class="up">上移</a><a href="javascript:;" class="down">下移</a>
+				</li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+			window.onload = function(){
+				var lis = document.getElementsByTagName('li');
+				var ul = document.querySelector('.box ul');
+				var liH = lis[0].offsetHeight;
+				var _down = document.querySelector('.box li .down');
+				var _up = document.querySelector('.box li .up');
+				//给li定位
+				function reSet(){
+					for(var i=0;i<lis.length;i++){
+						lis[i].style.top = (liH + 12)*i + 'px';
+					} 
+				}
+				reSet();
+				for(var i=0;i<lis.length;i++){
+					//下移
+					 lis[i].children[1].onclick = function(){
+						if(this.parentNode.nextElementSibling){
+							/*//修改top值
+							var a = this.parentNode.style.top;
+							var b = this.parentNode.nextElementSibling.style.top;
+							this.parentNode.style.top = b;
+							this.parentNode.nextElementSibling.style.top = a;*/
+							
+							//交换位置,先交换位置，位置变了，top值才会改变
+							ul.insertBefore(this.parentNode.nextElementSibling,this.parentNode);
+							setTimeout(reSet,0);
+							
+						}else{
+							ul.insertBefore(this.parentNode,ul.children[0]);
+							setTimeout(reSet,0);
+						}
+						
+					}
+					 
+					 //上移
+					lis[i].children[0].onclick = function(){
+						    //如果上一个元素节点不存在，默认调用appendChild方法
+					 		ul.insertBefore(this.parentNode,this.parentNode.previousElementSibling);
+					 		setTimeout(reSet,0);
+					}
+				}
+				
+				
+			}
+			
+		</script>
+	</body>
+</html>

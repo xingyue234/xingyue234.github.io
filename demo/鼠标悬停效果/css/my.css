@@ -1,0 +1,179 @@
+/*Global*/
+html{
+    width:100%;
+    height:100%;
+    text-size-adjest:none;
+    -webkit-text-size-adjest:none;
+    -moz-text-size-adjest:none;
+    -o-text-size-adjest:none;
+}
+body{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #1d9f75;
+    color: #74777b;
+    font-size: 1.5em;
+    font-weight: 300;
+    font-family: "Raleway","Arial",sans-serif;
+}
+ul,li{list-style-type: none}
+ul{margin: 0;
+padding: 0}
+a:link,a:active,a:focus{
+    text-decoration: none;
+    outline: none;
+}
+*{
+    box-sizing: border-box;
+    }
+
+*:after{
+     clear: both;
+ }
+@font-face {
+    font-family: "fonttawesome";
+    src: url(../fonts/fontawesome-webfont.eot) format("eot"),
+    url(../fonts/fontawesome-webfont.svg) format("svg"),
+    url(../fonts/fontawesome-webfont.ttf) format("truetype");
+    font-style: normal;
+}
+
+/*
+nav*/
+.nav{
+    width: 1000px;
+    height: 300px;
+    margin: 200px auto;
+}
+.nav li{
+    display: inline-block;
+    margin: 0 1.5em;
+}
+.tooltip{
+    color: rgba(0,0,0,0.3);
+    display: inline-block;
+    font-weight: 700;
+    position: relative;
+    z-index: 999;
+    transition:color 0.4s;
+    -webkit-transition:color 0.4s;
+    -moz-transition:color 0.4s;
+
+}
+.tooltip:hover
+{
+    color: rgba(255,255,255,1);;
+}
+span.tooltip-content:after{
+    content: "";
+    display: block;
+    width: 30px;
+    height: 20px;
+    background: url("../images/tooltip1.svg") no-repeat left;
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    margin: -7px 0 0 -15px;
+
+}
+.tooltip-content{
+     position: absolute;   /*自动转换成块元素了*/
+     z-index: 9999;
+     width: 80px;
+     height: 80px;
+     background: #ffffff;
+     border-radius:50%;            /*圆*/
+     left: 50%;
+     bottom: 100%;
+     margin-left: -40px;
+     margin-bottom: 20px;
+     text-align: center;
+     line-height: 80px;
+    color:#1d9f75;
+    opacity: 0;
+    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s,-moz-transform 0.3s;
+    transition: opacity 0.3s, -webkit-transform 0.3s,-moz-transform 0.3s;
+}
+
+.tooltip:hover .tooltip-content,
+.tooltip:hover .tooltip-content i
+{
+    opacity: 1;
+    -webkit-transform:translate3d(0,0,0) rotate3d(0,0,0,0) scale3d(1,1,1);
+    transform:translate3d(0,0,0) rotate3d(0,0,0,0) scale3d(1,1,1);
+    -moz-transform:translate3d(0,0,0) rotate3d(0,0,0,0) scale3d(1,1,1);
+}
+
+.tooltip-content i{
+    opacity: 0;                                                             /*需要事件触发的动画用transition, 自动播放的动画用animation*/
+    -webkit-transition: opacity 0.7s,transform 0.7s,-webkit-transform 0.7s;
+    -moz-transition: opacity 0.7s,transform 0.7s,-webkit-transform 0.7s;
+    transition: opacity 0.7s,transform 0.7s,-webkit-transform 0.7s;
+}
+/*动画初始状态*/
+.tooltip-effect-1 .tooltip-content{
+    transform:translate3d(0,10px,0) rotate3d(1,1,1,45deg);
+    -moz-transform:translate3d(0,10px,0) rotate3d(1,1,1,45deg);
+    -webkit-transform:translate3d(0,10px,0) rotate3d(1,1,1,45deg);                    /*/旋转系数，介于0-1之间/*/
+    -webkit-transform-origin: 50% 100%;
+    -moz-transform-origin: 50% 100%;
+    transform-origin: 50% 100%;
+    /*必须放在translate后面才能生效*/
+}
+.tooltip-effect-1 .tooltip-content i{
+    transform:scale3d(0.001,1,0.001);
+    -webkit-transform:scale3d(0.001,1,0.001);
+    -moz-transform:scale3d(0.001,1,0.001);
+}
+.tooltip-effect-2 .tooltip-content{
+    -webkit-transform:translate3d(0,20px,0);
+    -moz-transform:translate3d(0,20px,0);
+    transform:translate3d(0,20px,0);
+}
+.tooltip-effect-2 .tooltip-content i{
+    -webkit-transform:translateY(15px);
+    -moz-transform:translateY(15px);
+    transform:translateY(15px);
+}
+.tooltip-effect-3 .tooltip-content{
+    -webkit-transform:rotate3d(0,1,0,90deg) translate3d(0,10px,0);
+    -moz-transform:rotate3d(0,1,0,90deg) translate3d(0,10px,0);
+    transform:rotate3d(0,1,0,90deg) translate3d(0,10px,0);
+
+}
+.tooltip-effect-3 .tooltip-content i{
+    -webkit-transform:scale3d(0,0,1);
+    -moz-transform:scale3d(0,0,1);
+    transform:scale3d(0,0,1);
+}
+.tooltip-effect-4 .tooltip-content{
+    transform:translate3d(0,-20px,0);
+    -webkit-transform:translate3d(0,-20px,0);
+    -moz-transform:translate3d(0,-20px,0);
+
+
+}
+.tooltip-effect-4 .tooltip-content i{
+    transform:translate3d(0,20px,0);
+    -webkit-transform:translate3d(0,20px,0);
+    -moz-transform:translate3d(0,20px,0);
+
+}
+.tooltip-effect-5 .tooltip-content{
+    transform-origin:center bottom;
+     transform:scale3d(0.001,0.001,1);
+    -webkit-transform:scale3d(0.001,0.001,1);
+    -webkit-transform-origin:center bottom;
+    -moz-transform-origin:center bottom;
+
+}
+.tooltip-effect-5 .tooltip-content i{
+    transform:translate3d(0,10px,0);
+    -webkit-transform:translate3d(0,10px,0);
+    -moz-transform:translate3d(0,10px,0);
+
+}
+
+

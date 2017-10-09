@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>文字搬运工</title>
+		<style type="text/css">
+			.box{
+				width: 1000px;
+				height: 500px;
+				box-sizing: border-box;
+				padding: 45px;
+				background: #7066c7;
+				margin: 150px auto 0;
+			}
+			.right textarea{
+				float: right;
+			}
+			.right{float: right;}
+			.left,.right{
+				display: inline-block;
+				vertical-align: middle;
+				}
+			.left textarea, .right textarea{
+				outline: none;
+				display: inline-block;
+				width: 350px;
+				height: 410px;
+				background: white;
+				box-sizing: border-box;
+				border: 2px solid blue;
+				vertical-align: middle;
+				border-radius: 15px;
+				padding: 15px;
+				color: #492e97;
+				font-size: 16px;
+				font-family: "微软雅黑",sans-serif;
+			}
+			.btn{
+				display: inline-block;
+				vertical-align: middle;
+				margin-left: 45px;
+			}
+			.btn .move{
+				display: block;
+				width: 120px;
+				height: 90px;
+				background: #6de0fd;
+				color: white;
+				cursor: pointer;
+				text-align: center;
+				line-height: 40px;
+				position: relative;
+				font-family: "微软雅黑",sans-serif;
+				position: relative;
+				font-size: 16px;
+				border-radius: 15px;
+			}
+			.btn .move b{
+				font-family: "宋体",sans-serif;
+				position: absolute;
+				font-size: 50px;
+				display: inline-block;
+				left: 35px;
+                top: 12px;
+                
+            
+			}
+			.btn .count{
+				display: block;
+				color: #71c8f2;
+				font-family: arial;
+				font-size: 16px;
+				width: 120px;
+				text-align: center;
+				line-height: 35px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<div class="left"><textarea name="one" rows="10" cols="10"></textarea></div><div class="btn">
+				<span class="move"><b>→</b><br />把文字右移</span>
+				<span class="count">0/0</span>
+			</div><div class="right"><textarea name="two" rows="" cols=""></textarea></div>
+		</div>
+		<script>
+			window.onload = function(){
+				var box = document.querySelector('.box');
+				var move = box.querySelector('.move');
+				var count = box.querySelector('.count');
+				var left = box.querySelector('.left textarea');
+				var right = box.querySelector('.right textarea');
+				var timer;
+				//思路：左边文字从前面一个一个删除，右边文字从后面一个一个增加
+				//在定时器里面，每隔一定的时间，将左边的内容删除一个，同时给右边添加一个，直到左边的字符串为空
+				move.onclick = function(){
+					var str = left.value;
+					if(/^[\s]*$/.test(str)){
+						alert('请输入内容！');
+						return;
+					}
+					right.value = '';
+					//数组方法
+					/*var arr = str.split('');
+					clearInterval(timer);
+					timer = setInterval(function(){
+						right.value += arr.shift();//删除的元素赋值给右边
+						left.value = arr.join('');//剩余的元素赋值给左边
+						count.innerHTML = `${delBlank(right.value).length}/${delBlank(str).length}`;
+						if(arr.length == 0){
+						    clearInterval(timer);
+					     }
+					},16)*/
+					//字符串方法
+					var num = 0;
+					var l = str.length;
+					clearInterval(timer);
+					timer = setInterval(function(){
+						num++;
+						left.value = str.substr(num);
+						right.value = str.substr(0,num);
+						count.innerHTML = `${delBlank(right.value).length}/${delBlank(str).length}`;
+						if(num  == l){
+							clearInterval(timer);
+						} 
+					},16)
+				}
+				
+				//去除一个字符串里的空格
+				function delBlank(a){
+					a = a.split('');
+					while(a.indexOf(' ') != -1){
+						a.splice(a.indexOf(' '),1);
+					}
+					return a.join('');
+				}
+			}
+		</script>
+	</body>
+</html>

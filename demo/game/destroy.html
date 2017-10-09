@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>消除表情小游戏</title>
+		<style>
+			body{
+				margin: 0;
+			}
+			#box{
+				width:1000px;
+				height: 800px;
+				margin:50px auto 0;
+				background: #a344d4;
+				position: relative;
+				text-align: center;
+				
+			}
+			h4{
+				width: 500px;
+				position: absolute;
+				font-weight: normal;
+				color: white;
+				font-size: 18px;
+				top: 30px;
+				right: 150px;
+				line-height: 25px;
+				text-align: left;
+				transition: top .6s;
+			}
+			.con{
+				width: 760px;
+				height: 500px;
+				background: rgba(72,49,104,.6);
+				border: 4px solid #d7d1f6;
+				position: absolute;
+				right: 15px;
+				bottom: 100px;
+				overflow: hidden;
+			}
+			.count,.lose{
+				position: absolute;
+				width: 80px;
+				height: 80px;
+				box-sizing: border-box;
+				border: 1px solid #fff8f8;
+				border-radius: 50%;
+				left: 240px;
+				text-align: center;
+				line-height: 33px;
+				color: #fff8f8;
+				padding: 4px 18px 0 18px;
+				overflow: hidden;
+				font-size: 18px;
+				white-space: normal;
+				font-weight: 700;
+				transition: left .5s;
+				z-index: 22;
+			}
+			.count{
+				top: 205px;
+				background: rgba(174,48,210,.5);
+			}
+			.count em, .lose em{
+				font-size: 35px;
+				font-style: normal;
+			}
+			.lose{
+				top: 320px;
+				background: rgba(140,101,229,.5);
+			}
+			.start{
+				position: absolute;
+				left: 50%;
+				margin-left: -60px;
+				width: 120px;
+				height: 38px;
+				line-height: 38px;
+				text-align: center;
+				background: rgba(209,166,216,.5);
+				color: #fff8f8;
+				text-decoration: none;
+				border-radius: 6px;
+				border: 1px solid #fff8f8;
+				top: 60%;
+				transition: all .5s;
+				
+			}
+			.con img{
+				position: absolute;
+				cursor: pointer;
+			}
+			.speed{
+				width: 400px;
+				height: 30px;
+				position: absolute;
+				cursor: pointer;
+				top: 140px;
+				left: 340px;
+				color: white;
+				text-align: left;
+				line-height: 30px;
+				padding-left: 20px;
+				transition: top .8s, opacity .5s; 
+			}
+			
+			.speed span,.speed button{
+				width: 60px;
+				box-sizing: border-box;
+				height: 30px;
+				float: left;
+				display: inline-block;
+				text-align: center;
+				background: rgba(72,49,104,.4);
+				margin-right: 5px;
+				border: 1px solid white;
+				border-radius: 5px;
+				font-size: 16px;
+				
+			}
+			.speed span.selected{
+				background: rgba(72,49,104,.8);
+			}
+			.speed b{
+				float: left;
+				width: 140px;
+			}
+			.speed button{
+				outline: none;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<audio src="qq/bg.mp3"></audio>
+			<h4>游戏说明：“开始游戏”，鼠标经过随机掉下的表情，失分超过10分将不通过，得分超过10分才可以过关哦</h4>
+			<div class="speed">
+				<b>请选择速度：</b>
+				<span>慢速</span>
+				<span>中速</span>
+				<span>快速</span>
+				<button>确定</button>
+			</div>
+			<span class="count"><em>0</em> 得分</span>
+			<span class="lose"><em>0</em> 失分</span>
+			<div class="con">
+				<a href="javascript:;" class="start">开始游戏</a>
+			</div>
+		</div>
+		<script src="js/animation02.js"></script>
+		<script type="text/javascript">
+			window.onload = function(){
+				var imgSrc = ['qq01.png','qq02.png','qq03.png','qq04.png','qq05.png','qq06.png'];
+				
+				var start = document.querySelector('.start');
+				var con = document.querySelector('.con');
+				var countP = document.querySelector('.count');
+				var loseP = document.querySelector('.lose');
+				var count = countP.getElementsByTagName('em')[0];
+				var lose = loseP.getElementsByTagName('em')[0];
+				var audios = document.querySelector('audio');
+				var speed = document.querySelectorAll('.speed span');
+				var speedP = document.querySelector('.speed');
+				var btn = document.querySelector('button');
+				var h4 = document.querySelector('h4');
+				speed[0].speed = 'slow';
+				speed[1].speed = 'mid';
+				speed[2].speed = 'quick';
+				
+				//速度选择
+				for(var i=0;i<speed.length;i++){
+					speed[i].onclick = function(){
+						for(var i=0;i<speed.length;i++){
+							speed[i].className = '';
+							speed[i].checked = false;
+						}
+						this.className = 'selected';
+						this.checked = true;
+					}
+				}
+				//读取速度
+				function getSpeed(){
+					var s;
+					for(var i=0;i<speed.length;i++){
+						if(speed[i].checked){
+							s = speed[i].speed;
+						}
+					}
+					return s;
+				}
+				//运动
+				btn.onclick = function(){
+					speedP.style.top = '200px';
+					speedP.style.opacity = 0;
+					h4.style.top = '100px';
+				}
+				
+				//重新开始
+				function reStart(){
+					    audios.pause();
+						start.innerHTML = '重新开始';
+						//显示速度选择
+						start.style.top = '60%';
+						speedP.style.top = '140px';
+						speedP.style.opacity = 1;
+						h4.style.top = '30px';
+						//清空前一次的选择
+						for(var i=0;i<speed.length;i++){
+							speed[i].className = '';
+							speed[i].checked = false;
+						}
+				}
+				
+				//游戏开始	
+				start.onclick = function(){
+					if(!getSpeed()){
+						alert('Please select the speed!');
+						return;
+					}
+					audios.play();
+					var t;
+					switch(getSpeed()){
+						case 'slow': t= 3500;
+						break;
+						case 'mid' : t = 2500;
+						break;
+						case 'quick' : t = 1500;
+						break;
+					}
+					var c = 0;
+				    var l = 0;
+					this.style.top = '120%';
+					countP.style.left = '100px';
+					loseP.style.left = '100px';
+					
+					createImg();
+					function createImg(){
+						    
+						    var img = document.createElement('img');
+					        con.appendChild(img);
+						    var src = imgSrc.sort(function(){return Math.random()-0.5})[0];
+						    img.src = 'qq/'+src;
+						    img.style.top = '-61px';
+						    img.style.opacity = 1;
+						    
+						    //计算图片left值，固定在20-670之间
+							var left = getRandomNum(670,20);
+							img.style.left = left + 'px';
+							animation(img,{'top':500},t,'linear',function(){
+								if(parseInt(img.style.top) == 500 && isClicked == false){
+									shake(con,con.offsetLeft,'left');
+									l++;
+								    lose.innerHTML = l;
+								    con.removeChild(img);
+								    if(l > 10){
+								    	alert('很遗憾，没有通过。。。');
+								    	reStart();
+										l = 0;
+										lose.innerHTML = l;
+										return;
+								    }
+								    createImg();
+								    return;
+							    }
+							});
+							
+							var isClicked = false;
+							img.onmouseover = function(){
+							isClicked = true;
+							if(!img.timer02){
+									shake(this,left,'left',function(){
+									con.removeChild(img);
+									c++;
+									count.innerHTML = c;
+									if(c > 10){
+										alert('恭喜你，顺利过关！');
+										reStart();
+										c = 0;
+										count.innerHTML = c;
+										return;
+									}
+									clearInterval(img.timer);//清除图片向下的运动
+									createImg();  //重新开始下一次运动
+								 });
+							}
+						    }
+					}
+					
+				}
+				
+			}
+			
+			// min ≤ r ≤ max
+			function getRandomNum(max,min){
+				return min + Math.round(Math.random()*(max-min));
+			}
+			
+		</script>
+	</body>
+</html>

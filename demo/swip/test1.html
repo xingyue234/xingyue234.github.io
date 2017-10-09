@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>水果切换</title>
+		<style>
+			body,ul{margin: 0;padding: 0;}
+			ul{list-style: none;}
+			
+			.box{
+				width: 400px;
+				height: 500px;
+				margin: 50px auto 0;
+				position: relative;
+			}
+			.box ul{
+				width: 400px;
+				height: 350px;
+				overflow: hidden;
+			}
+			.box li{
+				width: 400px;
+				height: 350px;
+				position: absolute;
+				left: 0;
+				top: 0;
+				
+			}
+			.box li img{
+				position: absolute;
+				left: 50%;
+				top: 0;
+			}
+			
+			.box li span{
+				position: absolute;
+				left: 50%;
+				margin-left: -50px;
+				width: 100px;
+				line-height: 40px;
+				text-align: center;
+				bottom: 0;
+				font-size: 20px;
+				font-family: arial,sans-serif;
+				color: white;
+			}
+			.box .list{
+				width: 345px;
+				position: absolute;
+				bottom: 5px;
+				left: 50%;
+				margin-left: -172.5px;
+			}
+			.box .list a{
+				float: left;
+				width: 100px;
+				height: 80px;
+				margin-right: 15px;
+			}
+			.box .list a img{
+				float: left;
+				width: 100px;
+				height: 80px;
+				cursor: pointer;
+			}
+			.box .prev{
+				left: -80px;
+			}
+			.box .next{
+				right: -80px;
+			}
+			.box .prev,.box .next{
+				position: absolute;
+				width: 30px;
+				height: 50px;
+				line-height: 50px;
+				text-align: center;
+				background: rgba(0,0,0,.5);
+				color: white;
+				top: 175px;
+				margin-top: -25px;
+				cursor: pointer;
+			}
+			
+			
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<a class="prev"> < </a>
+			<a class="next"> > </a>
+			<ul>
+				<li><img src="img/bananas.png"/><span>BANANAS</span></li>
+				<li><img src="img/coconut.png"/><span>COCONUT</span></li>
+				<li><img src="img/orange.png"/><span>ORANGE</span></li>
+			</ul>
+			<div class="list">
+				<a href="#"><img src="img/tn-bananas@2x.png"/></a>
+				<a href="#"><img src="img/tn-coconut@2x.png"/></a>
+				<a href="#"><img src="img/tn-orange@2x.png"/></a>
+			</div>
+		</div>
+		<script>
+			window.onload = function(){
+					var box = document.querySelector('.box'),
+					    prev = box.querySelector('.prev'),
+					    next = box.querySelector('.next'),
+					    imgB = box.querySelectorAll('ul img'),
+					    texts = box.querySelectorAll('ul span'),
+					    imgS = box.querySelectorAll('.list img'),
+					    body = document.body;
+					
+					var bgColor = ['#2a92bd','#6bc75f','#44367d'];
+					var n = 0;
+					//设置图片居中
+					for(var i=0;i<imgB.length;i++){
+						imgB[i].style.marginLeft =  -imgB[i].offsetWidth/2 + 'px';
+					}
+					//初始化
+					for(var i=0;i<imgB.length;i++){
+						imgB[i].style.opacity = 0;
+						imgB[i].style.transform = 'scale(0)';
+						texts[i].style.opacity = 0;
+						texts[i].style.left = '60%';
+					}
+					imgB[n].style.opacity = 1;
+					imgB[n].style.transform = 'scale(1)';
+					texts[n].style.opacity = 1;
+					texts[n].style.left = '50%';
+					body.style.backgroundColor = bgColor[n];
+					
+					
+					next.onclick = function(){
+						     toNext1(n);
+						     n++;
+						     if(n > imgB.length - 1){
+						     	n = 0;
+						     }
+						     toNext2(n);
+						
+					}
+					
+					
+					prev.onclick = function(){
+						    toPrev1(n);
+						    n--;
+						    if(n < 0){
+						    	n = imgB.length - 1;
+						    }
+							toPrev2(n);
+					}
+					
+					for(var i=0;i<imgS.length;i++){
+						imgS[i].index = i;
+						imgS[i].onmouseover = function(){
+							if(this.index == n){
+								return;
+							}else if(this.index < n){
+								
+								toPrev1(n);
+								toPrev2(this.index);
+								
+							}else if (this.index > n){
+								
+								toNext1(n);
+								toNext2(this.index);
+								
+							}
+							
+							n = this.index;
+						}
+					}
+					 
+					 //部分函数封装
+					function toPrev1(m){
+						        //上一个背景渐渐消失
+								body.style.backgroundColor = bgColor[m];
+								body.style.transition = 'all 1s';
+								
+								imgB[m].style.transform = 'scale(0)';
+								imgB[m].style.opacity = 0;
+								imgB[m].style.transition = 'transform 1s,opacity 2.5s';
+								//增加透明度过渡时间
+								
+								for(var i=0;i<texts.length;i++){
+								    texts[i].style.left = '40%';
+							    }
+								//上一个从右移动慢慢消失
+								texts[m].style.left = '60%';
+								texts[m].style.opacity = '0';
+								texts[m].style.transition = 'opacity .8s,left 1s';
+					}
+					
+					function toPrev2(m){
+						        //这一个显示，透明度和缩放都设置为1
+								imgB[m].style.opacity = 1;
+								imgB[m].style.transform = 'scale(1)';
+								imgB[m].style.transition = 'opacity 1s';
+								
+								//这一个从右移动显示
+								texts[m].style.left = '50%';
+								texts[m].style.opacity = '1';
+								texts[m].style.transition = 'opacity .8s,left 1s';
+								
+								//这一个背景渐渐出现
+								body.style.backgroundColor = bgColor[m];
+								body.style.transition = 'all 1s';
+					}
+					
+					function toNext1(m){
+						       //上一个背景渐渐消失
+								body.style.backgroundColor = bgColor[m];
+								body.style.transition = 'all 1s';
+								
+								//上一个透明度和缩放都消失
+								imgB[m].style.opacity = 0;
+								imgB[m].style.transform = 'scale(0)';
+								imgB[m].style.transition = 'opacity 1s';
+								
+								
+								for(var i=0;i<texts.length;i++){
+								    texts[i].style.left = '60%';
+							    }
+							    //上一个从左慢慢消失
+								texts[m].style.left = '40%';
+								texts[m].style.opacity = '0';
+								texts[m].style.transition = 'opacity .8s,left 1s';
+					}
+					
+					function toNext2(m){
+						        //这一个透明度和缩放都设置为1
+								imgB[m].style.opacity = 1;
+								imgB[m].style.transform = 'scale(1)';
+								imgB[m].style.transition = 'transform 1s';
+								
+								//这一个从右慢慢出现
+								texts[m].style.left = '50%';
+								texts[m].style.opacity = '1';
+								texts[m].style.transition = 'opacity .6s,left 1s';
+								
+								//这一个背景渐渐出现
+								body.style.backgroundColor = bgColor[m];
+								body.style.transition = 'all 1s';
+					}
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <style type="text/css">
+		*{
+		  margin:0;
+		  padding:0;
+		}
+		img{
+			border: 1px solid rgba(0,0,0,.05);
+		}
+		#box{
+		  width:430px;
+		  height:430px;
+		  margin-left: 100px;
+		  margin-top: 100px;
+		  position:relative;
+		}
+		#box .simg{
+			width:430px;
+		    height:430px;
+		}
+		#move{
+		  background-image:url(img/move.png);
+		  width:220px;
+		  height:220px;
+		  position:absolute;
+		  left:0;
+		  top:0;
+		  display: none;
+		  cursor: move;
+		}
+		#bimg{
+		  width:430px;
+		  height:430px;
+		  overflow:hidden;
+		  position:absolute;
+		  top:0px;
+		  left:450px;
+		  display:none;
+		}
+		#bimg img{
+		  width:800px;
+		  height:800px;
+		  position:absolute;
+		  top:0px;
+		  left:0px;
+		}
+		#box:hover #bimg,
+		#box:hover #move
+		{
+			display: block;
+		}
+  </style>
+</head>
+<body>
+  <div id="box">
+    <img src="img/tim.jpg" class="simg">
+    <div id="move"></div>
+    <div id="bimg">
+      <img id="b_bimg" src="img/bimg.jpg" alt="#">
+    </div>
+  </div>
+</body>
+<script>
+	window.onload = function(){
+		var box = $("box"),
+			move = $("move"),
+			Box = $("bimg"),
+			bimg = $("b_bimg");
+			
+		box.onmousemove = function(e){
+			var boxW = box.offsetWidth,
+				boxH = box.offsetHeight,
+				moveW = move.offsetWidth,
+				moveH = move.offsetHeight,
+				BoxW = Box.offsetWidth,
+				BoxH = Box.offsetHeight,
+				bimgW = bimg.offsetWidth,
+				bimgH = bimg.offsetHeight;
+				
+			var x = e.clientX;
+			var y = e.clientY; //e.clientX鼠标当前位置到窗口可视区域的x，y坐标
+			                   //e.offsetY鼠标相对于事件源元素的x,y坐标
+			                
+			//计算move的left和top值
+			var left = x - box.offsetLeft- moveW/2;
+			var top = y - box.offsetTop - moveH/2;
+			
+			if(top<=0){
+				top = 0;
+			}else if(top >= boxH - moveH){
+				top = boxH - moveH;
+			}
+			if( left <= 0 ){      
+				left = 0;
+			}else if( left >= boxW - moveW ){
+				left = boxW - moveW;
+			}
+			move.style.left = left + 'px';
+			move.style.top = top + 'px';
+			
+			//计算大图的位置 
+			//left/boxW-moveW = - b_left/bimgW-BoxW
+			//top/boxH-moveH = - b_top/bimgH-BoxH
+			var b_left = left/(boxW - moveW)*(bimgW - BoxW);
+			var b_top = top/(boxH - moveH)*(bimgH - BoxH);
+			
+			bimg.style.left = - b_left + 'px';
+			bimg.style.top = - b_top + 'px';
+			
+		}
+	}
+	
+	
+	
+	function $(str){
+		return document.getElementById(str);
+	}
+</script>
+</html>

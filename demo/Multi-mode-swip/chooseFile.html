@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>利用鼠标画矩形</title>
+		<style type="text/css">
+				div{
+					background: rgba(0,255,0,.1);
+					position: absolute;
+					border: 1px solid rgba(0,255,0,.6);
+					
+				}
+				ul{
+					margin-left: 150px;
+					margin-top: 250px;
+					padding: 0;
+					list-style: none;
+				}
+				li{
+					float: left;
+					width: 120px;
+					height: 130px;
+					border: 1px solid #ccc;
+					background: url(images/bg.png) no-repeat 30px 20px;
+					margin: 20px;
+					position: relative;
+				}
+				.notselect:after{
+					content: '';
+					display: block;
+					position: absolute;
+					left: 7px;
+					top: 7px;
+					width: 10px;
+					height: 10px;
+					border: 1px solid #CCCCCC;
+				}
+				.select:after{
+					content: '';
+					display: block;
+					position: absolute;
+					left: 7px;
+					top: 7px;
+					width: 10px;
+					height: 10px;
+					border: 1px solid #CCCCCC;
+					background: #CCCCCC;
+				}
+				li.select{
+					background: rgba(0,255,0,.1) url(images/bg.png) no-repeat 30px 20px;
+				}
+		</style>
+	</head>
+	<body>
+		<ul>
+			<li class="notselect"></li>
+			<li class="notselect"></li>
+			<li class="notselect"></li>
+			<li class="notselect"></li>
+		</ul>
+		<script type="text/javascript">
+			var lis = document.querySelectorAll('li');
+			for(var i=0;i<lis.length;i++){
+				lis[i].onmousemove = function(){
+					return false;
+				}
+			}
+			
+			document.onmousedown = function(e){
+				var x1,y1,x2,y2;//鼠标按下和 move时 的 两个点的位置
+				e = e || event;
+				x1 = e.clientX;
+				y1 = e.clientY;
+				
+				var div = document.createElement('div');
+				div.style.left = x1 + 'px';
+				div.style.top = y1 + 'px';
+				document.body.appendChild(div);
+				
+				document.onmousemove = function(e){
+					e = e || event;
+					x2 = e.clientX;
+					y2 = e.clientY;
+					
+					//宽度和高度为两点之间距离的绝对值
+					var W = Math.abs(x2 - x1);
+					var H = Math.abs(y2 - y1);
+					div.style.width = W + 'px';
+					div.style.height = H + 'px';
+					
+					//left 和 top值为两点中最小的那个
+					var L = Math.min(x1,x2);
+					var T = Math.min(y1,y2);
+					div.style.left = L + 'px';
+					div.style.top = T + 'px';
+					
+					for(var i=0;i<lis.length;i++){
+						if(detection(div,lis[i])){
+							lis[i].className = 'select';
+						}else{
+							lis[i].className = 'notselect';
+						}
+					}
+					//选中文件夹
+					function detection(moveEle,obj){
+						var L1 = moveEle.offsetLeft;
+						var R1 = L1 + moveEle.offsetWidth;
+						var T1 = moveEle.offsetTop;
+						var B1 = T1 + moveEle.offsetHeight;
+						
+						var L2 = obj.offsetLeft;
+						var R2 = L2 + obj.offsetWidth;
+						var T2 = obj.offsetTop;
+						var B2 = T2 + obj.offsetHeight;
+						
+						if(R1 < L2 || L1 > R2 || B1 < T2 || T1 > B2 ){//没有碰撞的条件
+							return false;
+						}else{
+							return true;
+						}
+					}
+					
+				}
+				document.onmouseup = function(e){
+					document.onmousemove = null;
+					document.body.removeChild(div);
+				}
+				
+				return false;
+			}
+		</script>
+	</body>
+</html>

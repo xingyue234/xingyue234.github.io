@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>多模式图片切换</title>
+		<style>
+			.box{
+				width: 600px;
+				margin: 20px auto 0;
+				height: 338px;
+				border: 1px solid pink;
+				position: relative;
+				overflow: hidden;
+			}
+			.box img{
+				width: 600px;
+				height: 338px;
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
+			.prev, .next{
+				position: absolute;
+				display: inline-block;
+				width: 35px;
+				height: 50px;
+				text-align: center;
+				line-height: 50px;
+				font-size: 30px;
+				color: white;
+				background: rgba(0,0,0,.5);
+				position: absolute;
+				top: 50%;
+				margin-top: -25px;
+				z-index: 999999;
+				cursor: pointer;
+			}
+			.prev{
+				left: 0;
+			}
+			.next{
+				right: 0;
+			}
+			h2{
+				width: 100%;
+				text-align: center;
+				
+			}
+		</style>
+	</head>
+	<body>
+		<h2>通过上下左右按键控制图片切换</h2>
+		<div class="box">
+			<span class="prev"> < </span>
+			<span class="next"> > </span>
+		</div>
+		<script src="js/animation02.js"></script>
+		<script>
+			var box = document.querySelector('.box');
+			var prev = document.querySelector('.prev');
+			var next = document.querySelector('.next');
+			var imgSrc = [
+			'images/01.jpg',
+			'images/02.jpg',
+			'images/03.jpg',
+			'images/04.jpg',
+			'images/05.jpg',
+			'images/06.jpg'
+			]
+			//创建图片
+		  imgSrc.forEach(function(item){
+		  	var img = document.createElement('img');
+		  	img.src = item;
+		  	box.appendChild(img);
+		  })
+		  var box = document.querySelector('.box');
+		  var imgs = document.querySelectorAll('img');
+		  var boxW = box.offsetWidth;
+		  var boxH = box.offsetHeight;
+		  var n = 0;//当前显示哪一张
+		  var zIndex = 0;
+		  //初始化
+		  for(var i=0;i<imgs.length;i++){
+		  	imgs[i].style.left = -boxW + 'px';
+		  	imgs[i].onmousemove = function(){
+		  		return false;
+		  	}
+		  }
+		  imgs[0].style.left = 0;
+		  
+		  
+		  prev.onclick = function(){
+		  	
+            toLeft();
+		    
+		  }
+		  
+		  next.onclick = function(){
+		  	
+		  	toRight();
+		  	
+		  }
+		  prev.onmousedown = next.onmousedown = function(){
+		  	return false;
+		  }
+		  
+		  function toLeft(){
+		  	zIndex++;
+		    imgs[n].style.zIndex = zIndex;
+		    animation(imgs[n],{left:-boxW},400,'easeIn');
+		    
+		  	n--;
+		    if(n<0){
+		  		n = imgs.length - 1;
+		  	}
+		    
+		    imgs[n].style.top = 0;
+		    imgs[n].style.left = 0;
+		  }
+		  function toRight(){
+		  	zIndex++;
+		    imgs[n].style.zIndex = zIndex;
+		    animation(imgs[n],{left:boxW},400,'easeIn');
+		    
+		    
+		  	n++;
+		    if(n>imgs.length-1){
+		  		n = 0;
+		  	}
+		    
+		    imgs[n].style.top = 0;
+		    imgs[n].style.left = 0;
+		  }
+		  
+		  function toTop(){
+		  	zIndex++;
+		    imgs[n].style.zIndex = zIndex;
+		    animation(imgs[n],{top:-boxH},400,'easeIn');
+		    
+		    
+		  	n--;
+		    if(n<0){
+		  		n = imgs.length - 1;
+		  	}
+		    
+		    imgs[n].style.top = 0;
+		    imgs[n].style.left = 0;
+		    
+		  }
+		 //toTop();
+		  //toBottom();
+		  function toBottom(){
+		  	zIndex++;
+		    imgs[n].style.zIndex = zIndex;
+		    animation(imgs[n],{top:boxH},400,'easeIn');
+		    
+		    
+		  	n++;
+		    if(n>imgs.length-1){
+		  		n = 0;
+		  	}
+		    
+		    imgs[n].style.top = 0;
+		    imgs[n].style.left = 0;
+		  }
+			/*		  
+			down(x1,y1)
+			up(x2,y2)
+			
+			y2 - y1 > 0   |y2 - y1| > |x2 - x1|  向下
+			
+			y2 - y1 < 0   |y2 - y1| > |x2 - x1|  向上
+			
+			
+			x2 - x1 < 0   |x2 - x1| > |y2 - y1|  向左
+			
+			x2 - x1 > 0   |x2 - x1| > |y2 - y1|  向右
+		  */
+		  var x1,x2,y1,y2;
+		  box.onmousedown = function(e){
+		    	e = e || event;
+		  	    x1 = e.clientX;
+		  	    y1 = e.clientY;
+		  }
+		  
+		  box.onmouseup = function(e){
+		    	e = e || event;
+		    	x2 = e.clientX;
+		  	    y2 = e.clientY;
+		  	    var disX = x2 - x1 < 0 ? -(x2 - x1):x2 - x1;
+		  	    var disY = y2 - y1 < 0 ? -(y2 - y1):y2 - y1;
+		  	    
+		  	   // console.log(disY,disX);
+		  	    
+		  	    //向下
+		  	    if( disY > disX && y2 - y1 > 0 ){
+		  	    	toBottom();
+		  	    }
+		  	    
+		  	    //向上
+		  	    if( disY > disX && y2 - y1 < 0 ){
+		  	    	toTop();
+		  	    }
+		  	    
+		  	    //向左
+		  	    if( disX > disY && x2 - x1 < 0 ){
+		  	    	toLeft();
+		  	    }
+		  	    
+		  	    //向右
+		  	    if( disX > disY && x2 - x1 > 0 ){
+		  	    	toRight();
+		  	    }
+		  	    
+		  }
+		  
+		  //键盘事件
+		  document.onkeydown = function(e){
+		  	e = e || event;
+		  	console.log(e.which);
+		  	//左
+		  	if(e.which == 37){
+		  		toLeft();
+		  	}
+		  	//向上
+		  	if(e.which == 38){
+		  		toTop();
+		  	}
+		  	//向右
+		  	if(e.which == 39){
+		  		toRight();
+		  	}
+		  	//向下
+		  	if(e.which == 40){
+		  		toBottom();
+		  	}
+		  }
+		  
+		  //滚轮事件
+		  /*box.onmousewheel = function(e){
+		  	e = e || event;
+		  	
+		  	
+		  }*/
+		</script>
+	</body>
+</html>

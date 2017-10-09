@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>图片排序</title>
+		<style>
+			ul,li,body{margin: 0;padding: 0;}
+			li{list-style: none;}
+			
+			.box{
+				width: 1096px;
+				margin: 100px auto 0;
+				overflow: hidden;
+			}
+			.box li{
+				width: 232px;
+				height: 232px;
+				float: left;
+				margin-right: 40px;
+				margin-bottom: 40px;
+				border: 1px solid #CCCCCC;
+				border-radius: 10px;
+				overflow: hidden;
+				position: relative;
+			}
+			.box li span{
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				display: inline-block;
+				line-height: 50px;
+				width: 100%;
+				height: 50px;
+				background: rgba(0,0,0,.4);
+				color: white;
+				text-align: center;
+				font-family: arial;
+				font-size: 25px;
+			}
+			.box > div{
+				width: 300px;
+				margin: 0 auto 80px;
+			}
+			.box > div>span{
+				background: #e6d298;
+				padding: 8px 20px;
+				border-radius: 30px;
+				cursor: pointer;
+				font-size: 16px;
+				color: #e36202;
+				font-family: "微软雅黑",sans-serif;
+			}
+			.box > div>span:first-child{float: left;}
+			.box > div>span:last-child{float: right;}
+			.box > div>span.select{background: #e36202;color: white;}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<div>
+				<span class="select">从小到大</span>
+			    <span>打乱顺序</span>
+			</div>
+			<ul>
+				<li><img src="images03/a.jpg"/><span>1</span></li>
+				<li><img src="images03/b.jpg"/><span>2</span></li>
+				<li><img src="images03/c.jpg"/><span>3</span></li>
+				<li><img src="images03/d.jpg"/><span>4</span></li>
+				<li><img src="images03/e.jpg"/><span>5</span></li>
+				<li><img src="images03/f.jpg"/><span>6</span></li>
+				<li><img src="images03/g.jpg"/><span>7</span></li>
+				<li><img src="images03/h.jpg"/><span>8</span></li>
+			</ul>
+		</div>
+		<script>
+			window.onload = function(){
+				var order = document.querySelectorAll('.box div span')[0];
+				var random = document.querySelectorAll('.box div span')[1];
+				var lis = document.querySelectorAll('.box ul li');
+				var lisArr = Array.from(lis);;
+				var ul = document.querySelector('.box ul');
+				
+				order.onclick = function(){
+					ul.innerHTML = '';
+					//根据和a,b值相关的内容来排序
+					lisArr.sort(function(a,b){
+						var a1 = parseInt(a.querySelector('span').innerHTML);
+						var b1 = parseInt(b.querySelector('span').innerHTML);
+						return a1 - b1;
+					})
+					console.log(lis);
+					lisArr.forEach(function(ele){
+						ul.innerHTML += ele.outerHTML;
+					})
+					this.className = 'select';
+					random.className = '';
+				}
+				
+				random.onclick = function(){
+					ul.innerHTML = '';
+					lisArr.sort(function(){
+						return Math.random() - 0.5;
+					})
+					lisArr.forEach(function(ele){
+						ul.innerHTML += ele.outerHTML;
+					})
+					order.className = '';
+					this.className = 'select';
+				}
+			}
+		</script>
+	</body>
+</html>

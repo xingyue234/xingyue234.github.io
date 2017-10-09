@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>多级菜单</title>
+		<style type="text/css">
+			li{list-style: none;}
+			#box{
+				width:290px;
+				margin:50px auto;
+				cursor: default;
+			}
+			#box li{
+				position: relative;
+			}
+			#box  .more:after{
+				    content: '+';
+				    font-size: 22px;
+				    color: red;
+				    position: absolute;
+				    left: -15px;
+				    top: -2px;
+				    font-weight: 700;
+			}
+			#box  .view:after{
+				    content: '-';
+				    font-size: 22px;
+				    color: red;
+				    position: absolute;
+				    left: -15px;
+				    top: -2px;
+				    font-weight: 700;
+			}
+			
+			.pp ul{
+				display: none;
+			}
+			.pp > li{
+				display: block;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<ul class="pp">
+				<li>
+					第一级菜单
+					<ul>
+						<li>
+							第二级菜单
+							<ul>
+								<li>第三级菜单</li>
+								<li>第三级菜单</li>
+								<li>第三级菜单</li>
+							</ul>
+						</li>
+						<li>第二级菜单</li>
+						<li>
+							第二级菜单
+						    <ul>
+								<li>
+									第三级菜单
+									<ul>
+										<li>第四级菜单</li>
+										<li>第四级菜单</li>
+										<li>第四级菜单</li>
+									</ul>
+								</li>
+								<li>第三级菜单</li>
+								<li>
+									第三级菜单
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+				<li>
+					第一级菜单
+					<ul>
+						<li>第二级菜单</li>
+						<li>第二级菜单</li>
+					</ul>
+				</li>
+				<li>
+					第一级菜单
+					<ul>
+						<li>第二级菜单</li>
+						<li>
+							第二级菜单
+							<ul>
+								<li>
+									第三级菜单
+									<ul>
+										<li>第四级菜单</li>
+										<li>第四级菜单</li>
+										<li>第四级菜单</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li>
+							第二级菜单
+							<ul>
+								<li>第三级菜单</li>
+							</ul>
+						</li>
+						<li>第二级菜单</li>
+					</ul>
+				</li>
+				<li>
+					第一级菜单
+					<ul>
+						<li>
+							第二级菜单
+							<ul>
+								<li>第三级菜单</li>
+								<li>第三级菜单</li>
+								<li>第三级菜单</li>
+							</ul>
+						</li>
+						<li>第二级菜单</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+			window.onload = function(){
+				var pp = document.querySelector('#box .pp');
+				var pp_lis = document.querySelectorAll('.pp>li');
+				console.log(pp_lis);
+				var lis = document.querySelectorAll('#box li');
+				
+				//遍历所有li
+				for(var i=0;i<lis.length;i++){
+					lis[i].onOff = false;
+					if(lis[i].children.length && lis[i].children[0].children){
+						lis[i].className = 'more';
+					}
+					
+					lis[i].onclick = function(e){
+						e.stopPropagation();
+						if(this.children.length && this.children[0].children){
+							if(this.onOff){
+								hideUls(this);
+							    this.children[0].style.display = 'none';
+							    this.className = 'more';
+							    this.onOff = false;
+							    
+							}else{
+								if(this.parentNode == pp){
+									for(var i=0;i<pp_lis.length;i++){
+										hideUls(pp_lis[i]);
+									}
+								}
+								this.children[0].style.display = 'block';
+								this.className = 'view';
+								this.onOff = true;
+							}
+						}
+					}
+					
+				}
+				
+				function hideUls(t){
+					   
+					//获取this下的所有ul，隐藏所有子集菜单
+	                var uls = t.getElementsByTagName('ul');
+	                var lis = t.getElementsByTagName('li');
+	                t.onOff = false;
+	                t.className = 'more';
+	                for(var i=0;i<lis.length;i++){
+	                	if(lis[i].className == 'view'){
+	                		lis[i].className = 'more';
+	                	}
+	                	lis[i].onOff = false;
+	                }
+	                
+	                for(var i=0;i<uls.length;i++){
+	                     uls[i].style.display = 'none';
+	                }
+	                
+				}
+			}
+		</script>
+	</body>
+</html>
